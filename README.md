@@ -1,1 +1,1 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/pa0549997f4061io/branch/main?svg=true)](https://ci.appveyor.com/project/keereal1/dom-gbw8w/branch/main)
+![CI](https://github.com/o325oa/goblin_game/actions/workflows/web.yml/badge.svg)
