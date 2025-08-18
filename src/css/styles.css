@@ -1,6 +1,6 @@
 body {
   font-family: Arial, sans-serif;
-  cursor: url('../img/hammer.png'), auto;
+  cursor: auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,6 +24,7 @@ body {
   display: grid;
   gap: 10px;
   margin-top: 20px;
+  cursor: none;
 }
 
 .cell {
@@ -35,16 +36,18 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
+  cursor: auto;
 }
 
-.cell:hover, 
-.goblin:hover {
-  cursor: url('../img/hammer.png') 15 15, pointer !important;
+.cell * {
+  cursor: inherit;
 }
 
 .goblin {
   width: 80px;
   height: 80px;
   object-fit: contain;
+  cursor: inherit;
+}
   cursor: none;
 }
