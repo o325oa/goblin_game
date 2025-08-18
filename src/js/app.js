@@ -63,13 +63,70 @@ class Game {
     this.missesElement = document.getElementById('misses');
 
     this.setupHammerCursor();
+    this.setupCustomCursorFollower();
     this.setupCellClick();
     this.startGame();
   }
 
   setupHammerCursor() {
-    this.board.cells.forEach(cell => {
-    cell.style.cursor = `url(${hammerImage}) 15 15, pointer`;
+    const hammerImg = new Image();
+    hammerImg.src = hammerImage;
+    hammerImg.onload = () => {
+      const targetSize = 32;
+      const canvas = document.createElement('canvas');
+      canvas.width = targetSize;
+      canvas.height = targetSize;
+      const context = canvas.getContext('2d');
+
+      const scale = Math.min(
+        targetSize / hammerImg.width,
+        targetSize / hammerImg.height,
+        1,
+      );
+      const scaledWidth = Math.round(hammerImg.width * scale);
+      const scaledHeight = Math.round(hammerImg.height * scale);
+      const dx = Math.floor((targetSize - scaledWidth) / 2);
+      const dy = Math.floor((targetSize - scaledHeight) / 2);
+
+      context.clearRect(0, 0, targetSize, targetSize);
+      context.drawImage(hammerImg, dx, dy, scaledWidth, scaledHeight);
+
+      const cursorDataUrl = canvas.toDataURL('image/png');
+
+      this.board.cells.forEach((cell) => {
+        cell.style.cursor = `url(${cursorDataUrl}) 15 15, url(${hammerImage}) 15 15, pointer`;
+        cell.querySelectorAll('*').forEach((child) => {
+          child.style.cursor = 'inherit';
+        });
+      });
+    };
+  }
+
+  setupCustomCursorFollower() {
+    const cursorEl = document.createElement('img');
+    cursorEl.src = hammerImage;
+    cursorEl.alt = '';
+    cursorEl.style.position = 'fixed';
+    cursorEl.style.width = '24px';
+    cursorEl.style.height = '24px';
+    cursorEl.style.pointerEvents = 'none';
+    cursorEl.style.zIndex = '9999';
+    cursorEl.style.transform = 'translate(-10px, -10px)';
+    cursorEl.style.display = 'none';
+    document.body.appendChild(cursorEl);
+
+    const show = () => {
+      cursorEl.style.display = 'block';
+    };
+    const hide = () => {
+      cursorEl.style.display = 'none';
+    };
+
+    this.board.board.addEventListener('mouseenter', show);
+    this.board.board.addEventListener('mouseleave', hide);
+    this.board.board.addEventListener('mousemove', (e) => {
+      cursorEl.style.left = `${e.clientX}px`;
+      cursorEl.style.top = `${e.clientY}px`;
     });
   }
 
